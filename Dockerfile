@@ -1,23 +1,32 @@
-# Imagem única para build e produção
+# 1️⃣ Base para build e produção (Debian slim)
 FROM node:20-slim
 
+# Diretório de trabalho
 WORKDIR /app
 
-# Instala libssl1.1 necessária para o Prisma
-RUN apt-get update && apt-get install -y libssl3 && rm -rf /var/lib/apt/lists/*
-
-
+# Copiar package.json e package-lock.json
 COPY package*.json ./
+
+# Instalar dependências
 RUN npm install
 
+# Copiar todo o restante do código
 COPY . .
 
-# Gera build da aplicação
+# Build do projeto com tsup
 RUN npm run build
 
-# Gera Prisma Client
-RUN npx prisma generate
+# Gerar Prisma Client com binário compatível com Debian/OpenSSL
+RUN npx prisma generate --binary-targets native,debian-openssl-3.0.x
 
+# Variável de ambiente para produção
 ENV NODE_ENV=production
+
+# Expor porta usada pela aplicação
 EXPOSE 3333
-CMD ["npm", "run", "start"]
+
+# Garantir permissões corretas
+RUN chmod -R 755 /app
+
+# Comando para iniciar a aplicação
+CMD ["node", "build/server.js"]
