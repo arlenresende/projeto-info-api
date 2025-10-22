@@ -1,32 +1,48 @@
-# 1️⃣ Base para build e produção (Debian slim)
-FROM node:20-slim
+# Etapa de build
+FROM node:20-slim as builder
 
-# Diretório de trabalho
 WORKDIR /app
 
-# Copiar package.json e package-lock.json
+# Instalar dependências do sistema necessárias pro Prisma
+RUN apt-get update && apt-get install -y \
+  openssl \
+  libssl-dev \
+  ca-certificates \
+  && rm -rf /var/lib/apt/lists/*
+
+# Copiar arquivos de dependências
 COPY package*.json ./
 
 # Instalar dependências
 RUN npm install
 
-# Copiar todo o restante do código
+# Copiar o restante do código
 COPY . .
 
-# Build do projeto com tsup
+# Build do código com tsup
 RUN npm run build
 
-# Gerar Prisma Client com binário compatível com Debian/OpenSSL
+# Gerar Prisma Client com binários compatíveis
 RUN npx prisma generate --binary-targets native,debian-openssl-3.0.x
 
-# Variável de ambiente para produção
-ENV NODE_ENV=production
+# Etapa final: imagem de produção leve
+FROM node:20-slim
 
-# Expor porta usada pela aplicação
+WORKDIR /app
+
+# Instalar apenas libs mínimas para runtime
+RUN apt-get update && apt-get install -y \
+  openssl \
+  ca-certificates \
+  && rm -rf /var/lib/apt/lists/*
+
+# Copiar build e node_modules do builder
+COPY --from=builder /app/build ./build
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/prisma ./prisma
+
+ENV NODE_ENV=production
 EXPOSE 3333
 
-# Garantir permissões corretas
-RUN chmod -R 755 /app
-
-# Comando para iniciar a aplicação
 CMD ["node", "build/server.js"]
