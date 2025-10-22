@@ -16,14 +16,17 @@ COPY package*.json ./
 # Instalar dependências
 RUN npm install
 
+# Copiar o schema do Prisma ANTES de gerar o client
+COPY prisma ./prisma
+
+# Gerar Prisma Client com binários compatíveis
+RUN npx prisma generate --binary-targets native,debian-openssl-3.0.x
+
 # Copiar o restante do código
 COPY . .
 
 # Build do código com tsup
 RUN npm run build
-
-# Gerar Prisma Client com binários compatíveis
-RUN npx prisma generate --binary-targets native,debian-openssl-3.0.x
 
 # Etapa final: imagem de produção leve
 FROM node:20-slim
@@ -36,7 +39,7 @@ RUN apt-get update && apt-get install -y \
   ca-certificates \
   && rm -rf /var/lib/apt/lists/*
 
-# Copiar build e node_modules do builder
+# Copiar arquivos necessários do builder
 COPY --from=builder /app/build ./build
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
