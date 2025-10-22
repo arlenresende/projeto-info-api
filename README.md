@@ -1,6 +1,6 @@
 # 🚗 ResumoIA API
 
-API REST completa desenvolvida com Node.js, Fastify, Prisma e PostgreSQL. O projeto oferece funcionalidades de autenticação de usuários, gerenciamento de veículos e integração com IA para geração de conteúdo.
+API REST completa desenvolvida com Node.js, Fastify, Prisma e PostgreSQL. O projeto oferece funcionalidades de autenticação de usuários, gerenciamento de veículos dentre outros
 
 ## 🚀 Funcionalidades
 
@@ -19,11 +19,6 @@ API REST completa desenvolvida com Node.js, Fastify, Prisma e PostgreSQL. O proj
 - Exclusão de veículos
 - Validação de placa, chassi e RENAVAM
 
-### 🤖 Integração com IA
-- Geração de conteúdo usando OpenAI
-- Busca e resumo de artigos
-- Processamento de texto inteligente
-
 ## 🛠️ Tecnologias Utilizadas
 
 ### Backend
@@ -40,10 +35,9 @@ API REST completa desenvolvida com Node.js, Fastify, Prisma e PostgreSQL. O proj
 - **Zod** - Validação de esquemas
 
 ### Integrações
-- **OpenAI** - API de inteligência artificial
 - **Axios** - Cliente HTTP
 - **Resend** - Envio de emails
-- **Google Auth Library** - Autenticação Google
+
 
 ### Desenvolvimento
 - **Vitest** - Framework de testes
