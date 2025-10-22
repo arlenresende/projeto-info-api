@@ -1,0 +1,57 @@
+{
+  "name": "resumiIaAPI",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:dev": "tsx watch src/server.ts",
+    "start": "node build/server.js",
+    "test:create-prisma-environment": "npm link ./prisma/vitest-environment-prisma",
+    "test:install-prisma-environment": "npm link vitest-environment-prisma",
+    "build": "tsup src --out-dir build",
+    "test": "vitest run --dir src/use-cases",
+    "test:watch": "vitest --dir src/use-cases",
+    "pretest:e2e": "run-s test:create-prisma-environment test:install-prisma-environment",
+    "test:e2e": "vitest run --dir src/http",
+    "test:e2e:watch": "vitest --dir src/http",
+    "test:coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@rocketseat/eslint-config": "2.2.2",
+    "@types/bcryptjs": "2.4.6",
+    "@types/node": "20.14.12",
+    "@types/supertest": "6.0.2",
+    "@vitest/coverage-v8": "2.0.4",
+    "eslint": "8.57.0",
+    "npm-run-all": "4.1.5",
+    "prisma": "5.17.0",
+    "supertest": "7.0.0",
+    "tsup": "8.2.3",
+    "tsx": "4.16.2",
+    "typescript": "5.5.4",
+    "vite-tsconfig-paths": "4.3.2",
+    "vitest": "2.0.4"
+  },
+  "dependencies": {
+    "@fastify/cookie": "^11.0.2",
+    "@fastify/cors": "^11.1.0",
+    "@fastify/jwt": "^10.0.0",
+    "@fastify/multipart": "6.0.1",
+    "@prisma/client": "5.17.0",
+    "axios": "^1.12.2",
+    "bcryptjs": "2.4.3",
+    "dotenv": "16.4.5",
+    "fastify": "^5.5.0",
+    "google-auth-library": "9.13.0",
+    "openai": "^5.21.0",
+    "resend": "3.5.0",
+    "slugify": "1.6.6",
+    "zod": "3.23.8"
+  }
+}
+
+

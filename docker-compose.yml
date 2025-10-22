@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=resumoiaAPI
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - resumoia-network
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - 3333:3333
+    environment:
+      - DATABASE_URL=postgresql://postgres:docker@postgres:5432/resumoiaAPI
+      - NODE_ENV=dev
+      - JWT_SECRET=secret_key
+    depends_on:
+      - postgres
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - resumoia-network
+
+volumes:
+  postgres_data:
+
+networks:
+  resumoia-network:
+    driver: bridge
