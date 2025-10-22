@@ -77,11 +77,7 @@ DATABASE_URL="postgresql://postgres:docker@localhost:5432/resumoiaAPI"
 # JWT
 JWT_SECRET="your-jwt-secret-key"
 
-# OpenAI
-OPENAI_API_KEY="your-openai-api-key"
 
-# Email (Resend)
-RESEND_API_KEY="your-resend-api-key"
 ```
 
 ### 4. Inicie o banco de dados
